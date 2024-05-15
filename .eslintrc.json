@@ -64,7 +64,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["prettier", "node", "@typescript-eslint","typeorm"],
+  "plugins": ["prettier", "node", "@typescript-eslint"],
   "overrides": [
     {
       "extends": ["plugin:@typescript-eslint/disable-type-checked"],
