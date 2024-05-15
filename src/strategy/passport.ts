@@ -2,8 +2,8 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStatic } from 'passport';
 
-import { User } from '../entities';
-import { database, config } from '../config';
+// import Database from '../database';
+import { config } from '../config';
 
 type Payload = {
   id: string;
@@ -26,16 +26,14 @@ export const passportStrategy = (passport: PassportStatic): void => {
   passport.use(
     new Strategy(options, async (payload: Payload, done) => {
       try {
-        const user = await database
-          .getRepository(User)
-          .findOne({ where: { id: payload.id } });
+        const user = { id: payload.id, email: payload.email };
         if (!user) {
           return done(null, false);
         }
         const payloadUser = {
           id: user.id,
           email: user.email,
-          role: user.role,
+          // role: user.role,
         };
         return done(null, payloadUser);
       } catch (error) {
