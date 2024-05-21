@@ -10,6 +10,7 @@ import {
   requestType,
   isAdmin,
   isAuthenticated,
+  isOperator,
 } from '../middlewares';
 
 const UserRouter = Router();
@@ -49,3 +50,12 @@ UserRouter.delete(
   validationMiddleware(userParamQuerySchema, requestType.params),
   userController.deleteUser
 );
+
+UserRouter.get(
+  '/users/role/:role',
+  isAuthenticated,
+  isAdmin || isOperator,
+  userController.getUsersByRole
+);
+
+export { UserRouter };

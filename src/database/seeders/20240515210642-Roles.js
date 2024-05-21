@@ -39,8 +39,8 @@ module.exports = {
         },
         {
           id: '451f24d4-a329-4921-8d44-8504e3eb40d6',
-          name: 'industrial',
-          description: 'Role for industrial',
+          name: 'supplier',
+          description: 'Role for supplier',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

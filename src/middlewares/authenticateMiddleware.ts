@@ -40,14 +40,20 @@ export const isOperator = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export const isIndustrial = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isSupplier = (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User;
-  if (user && user.role && user.role.name !== 'industrial') {
+  if (user && user.role && user.role.name !== 'supplier') {
     return sendResponse(res, 403, null, 'Forbidden');
   }
   next();
+};
+
+export const isAllowed = (allowedRoles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as User;
+    if (user && user.role && !allowedRoles.includes(user.role.name)) {
+      return sendResponse(res, 403, null, 'Forbidden');
+    }
+    next();
+  };
 };

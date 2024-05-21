@@ -4,10 +4,10 @@ import { PassportStatic } from 'passport';
 
 // import Database from '../database';
 import { config } from '../config';
+import Database from '../database';
 
 type Payload = {
   id: string;
-  email: string;
   iat: number;
   exp: number;
 };
@@ -26,14 +26,24 @@ export const passportStrategy = (passport: PassportStatic): void => {
   passport.use(
     new Strategy(options, async (payload: Payload, done) => {
       try {
-        const user = { id: payload.id, email: payload.email };
+        const user = await Database.User.findOne({
+          where: {
+            id: payload.id,
+          },
+          include: [
+            {
+              model: Database.Role,
+              as: 'role',
+            },
+          ],
+        });
         if (!user) {
           return done(null, false);
         }
         const payloadUser = {
           id: user.id,
           email: user.email,
-          // role: user.role,
+          role: user.role,
         };
         return done(null, payloadUser);
       } catch (error) {

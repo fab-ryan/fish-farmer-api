@@ -45,6 +45,12 @@ export class User
 
   public status!: string;
 
+  public readonly createdAt!: Date;
+
+  public readonly updatedAt!: Date;
+
+  public readonly deletedAt!: Date;
+
   /**
    * @static
    * @memberof User
@@ -72,6 +78,9 @@ export class User
       role_id: this.role_id,
       role: this.role,
       status: this.status,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      deletedAt: this.deletedAt,
     };
   }
 }
