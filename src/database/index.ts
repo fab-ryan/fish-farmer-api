@@ -12,7 +12,6 @@ interface DatabaseConfigInterface {
   host: string;
   port: string;
   dialect: string;
-  secret: string;
   dialectOptions?: {
     ssl: {
       require: boolean;
@@ -21,12 +20,14 @@ interface DatabaseConfigInterface {
   };
 }
 
-const { username, database, password, host, dialectOptions } =
+const { username, database, password, host, dialectOptions, port } =
   getDatabaseConfig() as DatabaseConfigInterface;
+
 const sequelize = new Sequelize(database, username, password, {
   host,
+  port: parseInt(port, 10),
   dialect: 'postgres',
-  logging: true,
+  logging: false,
   ...(dialectOptions ? { dialectOptions } : {}),
 });
 
