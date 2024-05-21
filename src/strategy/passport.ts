@@ -43,7 +43,7 @@ export const passportStrategy = (passport: PassportStatic): void => {
         const payloadUser = {
           id: user.id,
           email: user.email,
-          // role: user.role,
+          role: user.role,
         };
         return done(null, payloadUser);
       } catch (error) {
