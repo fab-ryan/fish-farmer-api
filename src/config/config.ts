@@ -19,7 +19,7 @@ type TConfig = {
 };
 
 const config: TConfig = {
-  SERVER_PORT: process.env.SERVER_PORT || 3000,
+  SERVER_PORT: process.env.PORT || 3000,
   SECRET: process.env.SECRET || 'secret',
   CLOUDINARY: {
     CLOUD_NAME: process.env.CLOUD_NAME || '',
