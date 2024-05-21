@@ -61,7 +61,6 @@ export const userUpdateSchema = Joi.object({
     .min(10)
     .max(12)
     .regex(/^(078|073|072|079|25078|25073|25079|25072)[0-9]+$/)
-    .optional()
     .messages({
       'string.base': 'phone must be a string',
       'string.empty': 'phone cannot be an empty field',

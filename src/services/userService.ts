@@ -119,12 +119,25 @@ class UserServices {
   /**
    * @memberof UserService
    * @param {string} username - The username.
+   * @param {string} first_name - The first name.
+   * @param {string} last_name - The last name.
    * @returns {Promise<UserAttributes | null>} A user object.
    * @description Get a user by username.
    */
-  static async getUserByUsername(username: string): Promise<User | null> {
+  static async getUserByUsername(
+    username: string,
+    first_name?: string,
+    last_name?: string
+  ): Promise<User | null> {
     const user = await database.User.findOne({
-      where: { username },
+      where: {
+        username:
+          username ??
+          UserServices.formatUserName({
+            first_name: first_name ?? '',
+            last_name: last_name ?? '',
+          }),
+      },
     });
     if (!user) {
       return null;
@@ -140,6 +153,27 @@ class UserServices {
       return null;
     }
     return user;
+  }
+
+  static async getUsersByRole(role: string = 'user'): Promise<User[] | null> {
+    const users = await database.User.findAll({
+      include: [
+        {
+          model: database.Role,
+          as: 'role',
+          where: {
+            name: role,
+          },
+        },
+      ],
+      where: {
+        status: 'active',
+      },
+    });
+    if (!users) {
+      return null;
+    }
+    return users;
   }
 }
 

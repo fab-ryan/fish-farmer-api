@@ -9,7 +9,9 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
       return sendResponse(res, 400, null, 'Email already exists');
     }
     const usernameExists = await UserServices.getUserByUsername(
-      req.body.username
+      req.body.username,
+      req.body.first_name,
+      req.body.last_name
     );
     if (usernameExists) {
       return sendResponse(res, 400, null, 'Username already exists');
@@ -71,11 +73,28 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
+const getUsersByRole = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const users = await UserServices.getUsersByRole(req.params.role);
+    if (!users) {
+      return sendResponse(res, 404, null, 'No users found');
+    }
+    return sendResponse(res, 200, users, 'Users retrieved successfully');
+  } catch (error) {
+    const { message } = error as Error;
+    return sendResponse(res, 500, null, message);
+  }
+};
+
 const userController = {
   createUser,
   getUsers,
   getUserById,
   updateUser,
   deleteUser,
+  getUsersByRole,
 };
 export { userController };
