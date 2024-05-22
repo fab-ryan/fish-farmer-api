@@ -1,4 +1,5 @@
 /* eslint-disable valid-jsdoc */
+import { Op } from 'sequelize';
 import database, { Role, RoleAttributes } from '../database';
 
 interface RoleCreationAttributes extends Omit<RoleAttributes, 'id'> {}
@@ -23,8 +24,16 @@ export class RoleServices {
    * @returns {Promise<any>}
    * @description get all roles
    */
-  static async getRoles(): Promise<Role[]> {
-    return database.Role.findAll();
+  static async getRoles(role: Role): Promise<Role[]> {
+    if (role.name === 'admin') {
+      return database.Role.findAll();
+    }
+    // all return except admin
+    return database.Role.findAll({
+      where: {
+        [Op.not]: [{ name: 'admin' }, { name: 'operator' }],
+      },
+    });
   }
 
   /**

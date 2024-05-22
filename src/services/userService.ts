@@ -20,7 +20,15 @@ class UserServices {
    * @description Get all users.
    */
   static async getAllUsers(): Promise<UserAttributes[]> {
-    const users = await database.User.findAll();
+    const users = await database.User.findAll({
+      include: [
+        {
+          model: database.Role,
+          as: 'role',
+        },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
     return users;
   }
 
@@ -82,6 +90,15 @@ class UserServices {
     }
 
     return `0${phone.slice(3)}`;
+  }
+
+  static async isPhoneNumberExist(phone: string) {
+    const user = await database.User.findOne({
+      where: {
+        phone: UserServices.formatPhone(phone),
+      },
+    });
+    return user;
   }
 
   /**

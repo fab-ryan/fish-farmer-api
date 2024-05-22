@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { sendResponse } from '../utils';
-import { OrderService } from '../services';
+import { OrderService, ProductService } from '../services';
 import { Role } from '../database';
 
 const createOrder = async (req: Request, res: Response): Promise<Response> => {
@@ -8,9 +8,14 @@ const createOrder = async (req: Request, res: Response): Promise<Response> => {
     type User = { id: string };
 
     const { id } = req?.user as User;
+    const product = await ProductService.getProductBySlug(req.body.product_id);
+    if (!product) {
+      return sendResponse(res, 404, null, 'Product not found');
+    }
     const order = await OrderService.createOrder({
       ...req.body,
       user_id: id,
+      product_id: product.id,
     });
     if (!order) {
       return sendResponse(res, 500, null, 'Error creating order');

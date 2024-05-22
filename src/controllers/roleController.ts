@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { RoleServices } from '../services';
 import { sendResponse } from '../utils';
+import { Role } from '../database';
 
 const createRole = async (req: Request, res: Response): Promise<Response> => {
   try {
@@ -17,8 +18,16 @@ const createRole = async (req: Request, res: Response): Promise<Response> => {
 
 const getRoles = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const roles = await RoleServices.getRoles();
-    return sendResponse(res, 200, roles);
+    type User = { id: string; role: Role };
+    const { role } = req?.user as User;
+    const roles = await RoleServices.getRoles(role);
+    return sendResponse(
+      res,
+      200,
+      roles,
+      'Roles retrieved successfully',
+      'roles'
+    );
   } catch (error) {
     const { message } = error as Error;
     return sendResponse(res, 500, null, message);

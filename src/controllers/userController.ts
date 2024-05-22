@@ -8,6 +8,10 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
     if (emailExists) {
       return sendResponse(res, 400, null, 'Email already exists');
     }
+    const phoneExists = await UserServices.isPhoneNumberExist(req.body.phone);
+    if (phoneExists) {
+      return sendResponse(res, 400, null, 'Phone number already exists');
+    }
     const usernameExists = await UserServices.getUserByUsername(
       req.body.username,
       req.body.first_name,
@@ -30,7 +34,13 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
 const getUsers = async (_req: Request, res: Response): Promise<Response> => {
   try {
     const users = await UserServices.getAllUsers();
-    return sendResponse(res, 200, users, 'Users retrieved successfully');
+    return sendResponse(
+      res,
+      200,
+      users,
+      'Users retrieved successfully',
+      'users'
+    );
   } catch (error) {
     const { message } = error as Error;
     return sendResponse(res, 500, null, message);
@@ -82,7 +92,13 @@ const getUsersByRole = async (
     if (!users) {
       return sendResponse(res, 404, null, 'No users found');
     }
-    return sendResponse(res, 200, users, 'Users retrieved successfully');
+    return sendResponse(
+      res,
+      200,
+      users,
+      'Users retrieved successfully',
+      'users'
+    );
   } catch (error) {
     const { message } = error as Error;
     return sendResponse(res, 500, null, message);
