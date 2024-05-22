@@ -37,6 +37,10 @@ export const userCreationSchema = Joi.object({
     'string.empty': 'password cannot be an empty field',
     'any.required': 'password is a required field',
   }),
+  role_id: Joi.string().optional().messages({
+    'string.base': 'role_id must be a string',
+    'string.empty': 'role_id cannot be an empty field',
+  }),
 });
 
 export const userUpdateSchema = Joi.object({
@@ -70,6 +74,10 @@ export const userUpdateSchema = Joi.object({
   password: Joi.string().optional().messages({
     'string.base': 'password must be a string',
     'string.empty': 'password cannot be an empty field',
+  }),
+  role_id: Joi.string().optional().messages({
+    'string.base': 'role_id must be a string',
+    'string.empty': 'role_id cannot be an empty field',
   }),
 });
 

@@ -10,18 +10,13 @@ import {
   requestType,
   isAdmin,
   isAuthenticated,
-  isOperator,
+  // isOperator,
+  isAllowed,
 } from '../middlewares';
 
 const UserRouter = Router();
 
-UserRouter.get(
-  '/users',
-  isAuthenticated,
-  isAdmin,
-  validationMiddleware(userParamQuerySchema, requestType.params),
-  userController.getUsers
-);
+UserRouter.get('/users', isAuthenticated, isAdmin, userController.getUsers);
 UserRouter.get(
   '/users/:id',
   isAuthenticated,
@@ -54,7 +49,7 @@ UserRouter.delete(
 UserRouter.get(
   '/users/role/:role',
   isAuthenticated,
-  isAdmin || isOperator,
+  isAllowed(['admin', 'operator']),
   userController.getUsersByRole
 );
 

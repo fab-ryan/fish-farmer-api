@@ -6,11 +6,17 @@ import {
   requestType,
   isAdmin,
   isAuthenticated,
+  isAllowed,
 } from '../middlewares';
 
 const RoleRouter = Router();
 
-RoleRouter.get('/roles', isAuthenticated, isAdmin, roleController.getRoles);
+RoleRouter.get(
+  '/roles',
+  isAuthenticated,
+  isAllowed(['admin', 'operator']),
+  roleController.getRoles
+);
 RoleRouter.get(
   '/roles/:id',
   isAuthenticated,
@@ -41,6 +47,7 @@ RoleRouter.delete(
   '/roles/:id',
   isAuthenticated,
   isAdmin,
+
   validationMiddleware(getRoleSchema, requestType.params),
   roleController.deleteRole
 );
