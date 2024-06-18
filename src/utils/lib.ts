@@ -48,3 +48,14 @@ export const fileUpload = async (
     throw new Error(`Error uploading to cloudinary', ${errorMessage}`);
   }
 };
+
+export const handleDelete = async (publicId: string) => {
+  logger.info('Deleting from cloudinary', { label: 'handleDelete' });
+  try {
+    await cloudinary.v2.uploader.destroy(publicId);
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message;
+    logger.error(errorMessage, { label: 'handleDelete' });
+    throw new Error(`Error deleting from cloudinary', ${errorMessage}`);
+  }
+};
