@@ -32,13 +32,13 @@ router.get(
 router.post(
   '/supplier-orders',
   isAuthenticated,
-  // isOperator,
+  isOperator,
   validationMiddleware(supplierOrderCreateSchema, requestType.body),
   SupplierOrdersController.createSupplierOrder
 );
 
 router.patch(
-  '/supplier-orders/:id',
+  '/supplier-orders/:id/assign-supplier',
   isAuthenticated,
   isOperator,
   validationMiddleware(idQueryParamsSchema, requestType.params),

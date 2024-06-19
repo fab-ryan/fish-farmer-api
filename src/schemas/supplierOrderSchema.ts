@@ -45,13 +45,13 @@ export const supplierOrderUpdateSchema = joi
 export const supplierOrderStatusSchema = joi.object({
   status: joi
     .string()
-    .pattern(/^(pending|completed|canceled|processing)$/)
+    .pattern(/^(pending|processing|completed|canceled|delivered)$/)
     .messages({
       'string.base': 'status must be a string',
       'string.empty': 'status cannot be an empty field',
       'any.required': 'status is a required field',
       'string.pattern.base':
-        'status must be one of pending, completed, canceled or processing',
+        'status must be one of pending|processing|completed|canceled|delivered',
     })
     .required(),
 });

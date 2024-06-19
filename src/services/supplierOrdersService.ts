@@ -17,11 +17,75 @@ export class SupplierOrdersService {
   static async createSupplierOrder(
     data: SupplierOrderCreationAttributes
   ): Promise<SupplierOrders | null> {
-    const supplierOrder = await Database.SupplierOrder.create(data);
+    const currentAssignedSupplierOrder = await Database.SupplierOrder.findOne({
+      where: {
+        order_id: data.order_id,
+        supplier_id: data.supplier_id,
+      },
+      include: [
+        {
+          model: Database.Order,
+          as: 'order',
+          include: [
+            {
+              model: Database.ProductOrder,
+              as: 'product_orders',
+            },
+          ],
+        },
+        {
+          model: Database.User,
+          as: 'supplier',
+        },
+      ],
+    });
+    if (currentAssignedSupplierOrder) {
+      currentAssignedSupplierOrder.supplier_id = data.supplier_id;
+      await currentAssignedSupplierOrder.save();
+      return currentAssignedSupplierOrder;
+    }
+    const supplierOrder = await Database.SupplierOrder.create(data, {
+      include: [
+        {
+          model: Database.Order,
+          as: 'order',
+          include: [
+            {
+              model: Database.ProductOrder,
+              as: 'product_orders',
+            },
+          ],
+        },
+        {
+          model: Database.User,
+          as: 'supplier',
+        },
+      ],
+    });
     if (!supplierOrder) {
       return null;
     }
-    return supplierOrder;
+    const newSupplierOrder = await Database.SupplierOrder.findOne({
+      where: { id: supplierOrder.id },
+      include: [
+        {
+          model: Database.User,
+          as: 'supplier',
+          attributes: ['id', 'first_name', 'last_name', 'email', 'phone'],
+        },
+        {
+          model: Database.Order,
+          as: 'order',
+          include: [
+            {
+              model: Database.ProductOrder,
+              as: 'product_orders',
+            },
+          ],
+        },
+      ],
+    });
+    return newSupplierOrder;
   }
 
   /**
@@ -156,7 +220,7 @@ export class SupplierOrdersService {
   static async updateSupplierOrderStatus(
     id: string,
     status: string
-  ): Promise<[number, SupplierOrders[]]> {
+  ): Promise<SupplierOrders> {
     const updatedSupplierOrder = await Database.SupplierOrder.update(
       { status },
       {
@@ -164,6 +228,7 @@ export class SupplierOrdersService {
         returning: true,
       }
     );
-    return updatedSupplierOrder;
+    const updatedSupplierOrderData = updatedSupplierOrder[1][0];
+    return updatedSupplierOrderData;
   }
 }
