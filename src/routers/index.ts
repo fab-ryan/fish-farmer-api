@@ -5,6 +5,7 @@ import { UserRouter } from './userRouter';
 import { AuthRouter } from './authRouter';
 import { productRouter } from './productRouter';
 import { orderRouter } from './orderRouter';
+import { supplierOrderRouter } from './supplierOrderRouter';
 
 const router = Router();
 const routers: Router[] = [
@@ -13,6 +14,7 @@ const routers: Router[] = [
   AuthRouter,
   productRouter,
   orderRouter,
+  supplierOrderRouter,
 ];
 
 router.use('/api', ...routers);

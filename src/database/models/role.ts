@@ -1,5 +1,4 @@
 /* eslint-disable require-jsdoc */
-import { UUID } from 'crypto';
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
 export interface RoleAttributes {
@@ -16,7 +15,7 @@ export class Role
   extends Model<RoleAttributes, RoleCreationAttributes>
   implements RoleAttributes
 {
-  public id!: UUID;
+  public id!: string;
 
   public name!: string;
 

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable require-jsdoc */
 import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Order } from './order';
 
 export interface ProductAttributes {
   id: string;
@@ -57,8 +59,7 @@ export class Product
    * @description Associate the User model with other models.
    * @param {models} models - The models object containing all initialized models.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static associate(models: any) {}
+  static associate(models: { Order: typeof Order }) {}
 
   toJSON() {
     return {

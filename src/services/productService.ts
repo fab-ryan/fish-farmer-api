@@ -63,7 +63,7 @@ export class ProductService {
     data: Partial<ProductCreationAttributes>
   ): Promise<Product | null> {
     try {
-      const product = await Database.Product.findByPk(id);
+      const product = await Database.Product.findOne({ where: { id } });
       if (!product) {
         return null;
       }

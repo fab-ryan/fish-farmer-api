@@ -76,8 +76,35 @@ const getProductBySlug = async (
   }
 };
 
+const updateProduct = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { slug } = req.params;
+    const product = await ProductService.getProductBySlug(slug);
+    if (!product) {
+      return sendResponse(res, 404, null, 'Product not found');
+    }
+    if (req.files) {
+      req.body.images = await handlleProductUpload(req);
+      [req.body.thumbnail] = req.body.images;
+    }
+    const data = req.body;
+    const updatedProduct = await ProductService.updateProduct(product.id, data);
+    if (!updatedProduct) {
+      return sendResponse(res, 500, null, 'Error updating product');
+    }
+    return sendResponse(res, 200, updatedProduct, 'Product updated', 'product');
+  } catch (error) {
+    const { message } = error as Error;
+    return sendResponse(res, 500, null, message);
+  }
+};
+
 export const productController = {
   createProduct,
   getProducts,
   getProductBySlug,
+  updateProduct,
 };

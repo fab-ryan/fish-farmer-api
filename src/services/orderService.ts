@@ -33,13 +33,7 @@ export class OrderService {
     return order;
   }
 
-  static async getOrders({
-    userId,
-    role,
-  }: {
-    userId: string;
-    role: Role;
-  }): Promise<Order[] | null> {
+  static async getOrders({ userId, role }: { userId: string; role: Role }) {
     const whereCondition = role.name === 'user' ? { user_id: userId } : {};
     const orders = await Database.Order.findAll({
       order: [['createdAt', 'DESC']],
@@ -62,7 +56,36 @@ export class OrderService {
         },
       ],
     });
-    return orders;
+
+    const supplierOrders = await Database.SupplierOrder.findAll({
+      attributes: ['order_id', 'supplier_id', 'status', 'createdAt'],
+      include: [
+        {
+          model: Database.User,
+          as: 'supplier',
+          attributes: ['id', 'first_name', 'last_name', 'email', 'phone'],
+        },
+      ],
+    });
+
+    const ordersWithSupplier = orders.map(order => {
+      const supplierOrder = supplierOrders.find(
+        supplierOrder => supplierOrder.order_id === order.id
+      );
+      if (supplierOrder) {
+        return {
+          ...order.toJSON(),
+          supplier: supplierOrder.supplier,
+          supplier_status: supplierOrder.status,
+        };
+      }
+      return {
+        ...order.toJSON(),
+        supplier: null,
+        supplier_status: null,
+      };
+    });
+    return ordersWithSupplier;
   }
 
   static async getOrderById(id: string): Promise<Order | null> {
