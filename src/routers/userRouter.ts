@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { userController } from '../controllers';
+import { userController, updateProfileController } from '../controllers';
 import {
   userCreationSchema,
   userParamQuerySchema,
-  userUpdateSchema,
+  // userUpdateSchema,
+  updateProfileSchema,
 } from '../schemas';
 import {
   validationMiddleware,
@@ -12,6 +13,7 @@ import {
   isAuthenticated,
   // isOperator,
   isAllowed,
+  uploadProfileMiddleware,
 } from '../middlewares';
 
 const UserRouter = Router();
@@ -30,13 +32,21 @@ UserRouter.post(
   userController.createUser
 );
 UserRouter.patch(
-  '/users/:id',
+  '/users/profile',
   isAuthenticated,
-  isAdmin,
-  validationMiddleware(userParamQuerySchema, requestType.params),
-  validationMiddleware(userUpdateSchema, requestType.body),
-  userController.updateUser
+  uploadProfileMiddleware,
+  validationMiddleware(updateProfileSchema, requestType.body),
+  updateProfileController.createProfile
 );
+
+// UserRouter.patch(
+//   '/users/:id',
+//   isAuthenticated,
+//   isAdmin,
+//   validationMiddleware(userParamQuerySchema, requestType.params),
+//   validationMiddleware(userUpdateSchema, requestType.body),
+//   userController.updateUser
+// );
 
 UserRouter.delete(
   '/users/:id',
@@ -53,4 +63,9 @@ UserRouter.get(
   userController.getUsersByRole
 );
 
+UserRouter.get(
+  '/users/profile',
+  isAuthenticated,
+  updateProfileController.getProfile
+);
 export { UserRouter };

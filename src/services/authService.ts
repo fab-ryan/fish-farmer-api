@@ -81,7 +81,10 @@ export class AuthService {
   static async profile(id: string): Promise<User | null> {
     const user = await Database.User.findOne({
       where: { id },
-      include: [{ model: Database.Role, as: 'role' }],
+      include: [
+        { model: Database.Role, as: 'role' },
+        { model: Database.Profile, as: 'profile' },
+      ],
     });
     if (!user) {
       return null;
