@@ -37,3 +37,20 @@ export const uploadProductMiddleware = (
     next();
   });
 };
+
+export const uploadProfileMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  multerUploads.single('avatar')(req as Request, res as Response, err => {
+    if (err instanceof multer.MulterError) {
+      return sendResponse(res, 400, null, err.message);
+    }
+
+    if (err) {
+      return sendResponse(res, 500, null, err.message);
+    }
+    next();
+  });
+};

@@ -90,3 +90,38 @@ export const userParamQuerySchema = Joi.object({
     'string.GUID': 'id must be a valid GUID',
   }),
 });
+
+export const updateProfileSchema = Joi.object({
+  bio: Joi.string().optional().messages({
+    'string.base': 'bio must be a string',
+    'string.empty': 'bio cannot be an empty field',
+  }),
+  company_name: Joi.string().optional().messages({
+    'string.base': 'company_name must be a string',
+    'string.empty': 'company_name cannot be an empty field',
+  }),
+  company_website: Joi.string().optional().messages({
+    'string.base': 'company_website must be a string',
+    'string.empty': 'company_website cannot be an empty field',
+  }),
+  province: Joi.string().optional().messages({
+    'string.base': 'province must be a string',
+    'string.empty': 'province cannot be an empty field',
+  }),
+  district: Joi.string().optional().messages({
+    'string.base': 'district must be a string',
+    'string.empty': 'district cannot be an empty field',
+  }),
+  sector: Joi.string().optional().messages({
+    'string.base': 'sector must be a string',
+    'string.empty': 'sector cannot be an empty field',
+  }),
+  cell: Joi.string().optional().messages({
+    'string.base': 'cell must be a string',
+    'string.empty': 'cell cannot be an empty field',
+  }),
+  village: Joi.string().optional().messages({
+    'string.base': 'village must be a string',
+    'string.empty': 'village cannot be an empty field',
+  }),
+});

@@ -1,5 +1,6 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 import { Role } from './role';
+import { Profile } from './profile';
 
 export interface UserAttributes {
   id: string;
@@ -45,6 +46,8 @@ export class User
 
   public status!: string;
 
+  public readonly profile?: Profile;
+
   public readonly createdAt!: Date;
 
   public readonly updatedAt!: Date;
@@ -58,8 +61,9 @@ export class User
    * @description Associate the User model with other models.
    * @param {models} models - The models object containing all initialized models.
    */
-  static associate(models: { Role: typeof Role }) {
+  static associate(models: { Role: typeof Role; Profile: typeof Profile }) {
     User.belongsTo(models.Role, { foreignKey: 'role_id', as: 'role' });
+    User.hasOne(models.Profile, { foreignKey: 'user_id', as: 'profile' });
   }
 
   /**
@@ -78,6 +82,7 @@ export class User
       role_id: this.role_id,
       role: this.role,
       status: this.status,
+      profile: this.profile,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt,
