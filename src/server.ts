@@ -1,6 +1,6 @@
-import { app, port } from './app';
+import { httpServer, port } from './app';
 import { logger } from './utils';
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
   logger.info(`Server is running on http://localhost:${port}`);
 });

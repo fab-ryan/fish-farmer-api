@@ -42,6 +42,7 @@
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.2",
+    "socket.io": "^4.7.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "winston": "^3.13.0",
